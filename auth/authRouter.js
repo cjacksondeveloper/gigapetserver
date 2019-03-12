@@ -18,7 +18,7 @@ router.post("/register", (req, res) => {
     });
 });
 
-router.post("/login", (req, res) => {
+router.get("/login", (req, res) => {
   const { username, password } = req.body;
   db.findAllByFilter('users', {username})
     .first()
@@ -33,7 +33,7 @@ router.post("/login", (req, res) => {
 });
 
 
-router.post("/checkauth", (req, res) => {
+router.get("/checkauth", (req, res) => {
   const token = req.body.token;
   jwt.verify(token, jwtSecret, err => {
     if (err) {
