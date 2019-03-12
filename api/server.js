@@ -8,8 +8,8 @@ const server = express();
 
 configMW(server);
 
-server.use('/api/auth', authRouter);
-server.use('/api/gpRouter', gpRouter);
+server.use('/api/users', authRouter);
+server.use('/api/app', gpRouter);
 
 const port = process.env.PORT || 3300;
 

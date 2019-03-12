@@ -1,5 +1,7 @@
 const knex = require('knex')
 
-const knexConfig = require('../knexfile.js')
+dbenv = process.env.DBENV || 'development'
 
-module.exports = knex(knexConfig.development)
+const knexConfig = require('../knexfile.js')[dbenv]
+
+module.exports = knex(knexConfig)
