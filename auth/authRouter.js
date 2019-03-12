@@ -2,7 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { jwtSecret } = require("../config/secrets.js");
-const authMW = require("../auth/AuthMW.js");
+const authMW = require("./authMW.js");
 const db = require("../gp/gpModule.js");
 
 router.post("/register", (req, res) => {
