@@ -1,12 +1,14 @@
 require('dotenv').config();
+const cors = require("cors");
 const express = require('express')
 const authRouter = require("../auth/authRouter.js")
 const gpRouter = require("../gp/gpRouter.js")
-const configMW = require("./middleware.js")
+// const configMW = require("./middleware.js")
 
 const server = express();
 
-configMW(server);
+server.use(express.json());
+server.use(cors({ credentials: true, origin: true }))
 
 server.use('/api/users', authRouter);
 server.use('/api/app', gpRouter);
