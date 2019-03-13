@@ -21,7 +21,7 @@ exports.seed = function(knex, Promise) {
         {id: 16, foodId: 3, mealTime:"Breakfast", childId: 3, date: "03_13_2019"},
         {id: 17, foodId: 4, mealTime:"Lunch", childId: 3, date: "03_13_2019"},
         {id: 18, foodId: 5, mealTime:"Dinner", childId: 3, date: "03_13_2019"},
-        {id: 19, foodID: 6, mealTime:"Breakfast", childId: 4, date: "03_12_2019"}
+        {id: 19, foodId: 6, mealTime:"Breakfast", childId: 4, date: "03_12_2019"}
       ]);
     });
 };
