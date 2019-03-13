@@ -1,16 +1,18 @@
-
 exports.up = function(knex, Promise) {
-    return knex.schema
+  return knex.schema
     .createTable("users", column => {
       column.increments();
-      column.string("name", 100)
-      column.string("email", 100)
-      column.string("username", 32).notNullable().unique();
+      column.string("fullName", 100);
+      column.string("email", 100);
+      column
+        .string("username", 32)
+        .notNullable()
+        .unique();
       column.string("password", 32).notNullable();
     })
     .createTable("children", column => {
       column.increments();
-      column.string("name", 100).notNullable();
+      column.string("fullName", 100).notNullable();
       column
         .integer("parentId")
         .unsigned()
@@ -19,9 +21,46 @@ exports.up = function(knex, Promise) {
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
     })
-    .createTable("months", column => {
+    .createTable("food", column => {
       column.increments();
-      column.string("monthName", 100).notNullable();
+      column.string("foodName", 100).notNullable();
+      column
+        .integer("meat")
+        .notNull()
+        .defaultTo(0);
+      column
+        .integer("grain")
+        .notNull()
+        .defaultTo(0);
+      column
+        .integer("fruit")
+        .notNull()
+        .defaultTo(0);
+      column
+        .integer("vegetable")
+        .notNull()
+        .defaultTo(0);
+      column
+        .integer("dairy")
+        .notNull()
+        .defaultTo(0);
+      column
+        .integer("sugar")
+        .notNull()
+        .defaultTo(0);
+    })
+    .createTable("children_food", column => {
+      column.increments();
+      column.string("foodName", 100).notNullable();
+      column.string("mealTime", 12);
+      column.date("date", 24);
+      column
+        .integer("foodId")
+        .unsigned()
+        .references("id")
+        .inTable("food")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
       column
         .integer("childId")
         .unsigned()
@@ -29,47 +68,13 @@ exports.up = function(knex, Promise) {
         .inTable("children")
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
-    })
-    .createTable("weeks", column => {
-      column.increments();
-      column
-        .integer("monthsId")
-        .unsigned()
-        .references("id")
-        .inTable("months")
-        .onDelete("CASCADE")
-        .onUpdate("CASCADE");
-    })
-    .createTable("days", column => {
-      column.increments();
-      column
-        .integer("weeksId")
-        .unsigned()
-        .references("id")
-        .inTable("weeks")
-        .onDelete("CASCADE")
-        .onUpdate("CASCADE");
-    })
-    .createTable("food", column => {
-      column.increments();
-      column.string("foodName", 100)
-      column.string("mealTime", 12)
-      column
-        .integer("daysId")
-        .unsigned()
-        .references("id")
-        .inTable("days")
-        .onDelete("CASCADE")
-        .onUpdate("CASCADE");
     });
 };
 
 exports.down = function(knex, Promise) {
-    return knex.schema
+  return knex.schema
     .dropTableIfExists("users")
     .dropTableIfExists("children")
-    .dropTableIfExists("months")
-    .dropTableIfExists("weeks")
-    .dropTableIfExists("days")
     .dropTableIfExists("food")
+    .dropTableIfExists("children_food");
 };
