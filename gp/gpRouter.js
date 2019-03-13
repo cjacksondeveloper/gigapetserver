@@ -37,7 +37,7 @@ router.post("/childnames", authenticate, (req, res) => {
 // })
 
 // router.post("/addfood", authenticate, (req, res) => {
-
+//   let { fullName, foodName, foodType, date, parentId, mealTime}
 // })
 
 router.post("/addchild", authenticate, (req, res) => {
