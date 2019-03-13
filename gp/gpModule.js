@@ -29,8 +29,9 @@ async function add(user) {
   return findById("users", id);
 }
 
-function addChild(request) {
-  return db("children").insert(request)
+async function addChild(request) {
+  const [id] = await db("children").insert(request);
+  return findById("children", id).select("fullName")
 }
 
 function getChildren(parentId) {
