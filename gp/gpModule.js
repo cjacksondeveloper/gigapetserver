@@ -2,6 +2,8 @@ const db = require("../data/dbConfig.js");
 
 module.exports = {
   add,
+  addChild,
+  getChildren,
   findUser,
   findAllByFilter,
   findById,
@@ -25,6 +27,16 @@ function findById(table, id) {
 async function add(user) {
   const [id] = await db("users").insert(user);
   return findById("users", id);
+}
+
+function addChild(request) {
+  return db("children").insert(request)
+}
+
+function getChildren(parentId) {
+  return db("children")
+  .select("fullName")
+  .where("parentId", parentId)
 }
 
 function getFoods(parentId, date) {

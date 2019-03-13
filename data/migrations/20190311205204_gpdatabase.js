@@ -24,36 +24,13 @@ exports.up = function(knex, Promise) {
     .createTable("food", column => {
       column.increments();
       column.string("foodName", 100).notNullable();
-      column
-        .integer("meat")
-        .notNull()
-        .defaultTo(0);
-      column
-        .integer("grain")
-        .notNull()
-        .defaultTo(0);
-      column
-        .integer("fruit")
-        .notNull()
-        .defaultTo(0);
-      column
-        .integer("vegetable")
-        .notNull()
-        .defaultTo(0);
-      column
-        .integer("dairy")
-        .notNull()
-        .defaultTo(0);
-      column
-        .integer("sugar")
-        .notNull()
-        .defaultTo(0);
+      column.string('foodType', 12).notNullable();
     })
     .createTable("children_food", column => {
       column.increments();
-      column.string("mealTime", 12);
-      column.date("date", 24);
       column
+      column.string("mealTime", 12);
+      column.date("date", 24)
         .integer("foodId")
         .unsigned()
         .references("id")
