@@ -3,10 +3,12 @@ const router = require("express").Router();
 const db = require("./gpModule.js");
 const { authenticate } = require("../auth/authMW.js");
 
-router.get("/", authenticate, (req, res) => {
-    db.find().then(users => {
-      res.json({ users, jwtObject: req.jwtObject });
-    });
+router.post("/", authenticate, (req, res) => {
+  let { parentId, date } = req.body
+    db.getFoods(parentId, date).then(users => {
+      res.send(users);
+    })
+    .catch(err => {console.log(err)})
   });
 
 module.exports = router;

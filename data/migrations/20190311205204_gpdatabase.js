@@ -51,7 +51,6 @@ exports.up = function(knex, Promise) {
     })
     .createTable("children_food", column => {
       column.increments();
-      column.string("foodName", 100).notNullable();
       column.string("mealTime", 12);
       column.date("date", 24);
       column
