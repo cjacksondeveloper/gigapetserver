@@ -25,7 +25,8 @@ router.post("/login", (req, res) => {
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = authMW.makejwt(user);
-        res.status(200).json({ message: `welcome ${user.username}`, token });
+        const userdata = {token: token, userId: user.id}
+        res.status(200).json(userdata);
       } else {
         res
           .status(401)
