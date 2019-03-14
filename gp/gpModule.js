@@ -149,7 +149,6 @@ async function updateFood(
     .join("children", "children.id", "=", "food.childId");
 }
 
-// function getFoodStats(childId, dateStart, dateEnd) {
-//   return db("food")
-//   .where
-// }
+function getFoodStats(childId, dateStart, dateEnd) {
+  return db("food")
+}
