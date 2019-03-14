@@ -4,6 +4,9 @@ module.exports = {
   add,
   addChild,
   getChildren,
+  addFood,
+  findFood,
+  findChildId,
   findUser,
   findAllByFilter,
   findById,
@@ -31,20 +34,51 @@ async function add(user) {
 
 async function addChild(request) {
   const [id] = await db("children").insert(request);
-  return findById("children", id).select("fullName")
+  return findById("children", id).select("fullName");
 }
 
 function getChildren(parentId) {
   return db("children")
-  .select("fullName")
-  .where("parentId", parentId)
+    .select("fullName")
+    .where("parentId", parentId);
 }
 
 function getFoods(parentId, date) {
-  return db("children_food")
-  .select('children.fullName', 'food.foodName', "children_food.date", "children_food.mealTime")
-  .where("date", date) 
-  .andWhere("parentId", parentId)
-  .leftJoin("food", "food.Id", '=', "children_food.foodId")
-  .join("children", "children.Id", '=', "children_food.childId")
+  return db("food")
+    .select(
+      "children.fullName",
+      "food.foodName",
+      "food.date",
+      "food.mealTime"
+    )
+    .where("date", date)
+    .andWhere("parentId", parentId)
+    .join("children", "children.Id", "=", "food.childId");
+}
+
+function addFood(parentId, fullName) {
+  return db("children_food");
+}
+
+function findFood(foodName) {
+  return db("food").where("foodName", foodName);
+}
+
+function findChildId(parentId, fullName) {
+  return db("children")
+    .where("fullName", fullName)
+    .andWhere("parentId", parentId)
+    .first()
+}
+
+function addFood(childId, foodType, foodName, date, mealTime) {
+  return db("food").insert(
+    {
+      childId: childId,
+      foodType: foodType,
+      foodName: foodName,
+      date: date,
+      mealTime: mealTime
+    }
+  )
 }

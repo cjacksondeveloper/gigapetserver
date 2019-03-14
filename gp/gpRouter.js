@@ -37,8 +37,51 @@ router.post("/childnames", authenticate, (req, res) => {
 // })
 
 // router.post("/addfood", authenticate, (req, res) => {
-//   let { fullName, foodName, foodType, date, parentId, mealTime}
-// })
+//   let { fullName, foodName, foodType, date, parentId, mealTime } = req.body;
+//   food = { foodName };
+//   db.findFood(food)
+//     .then(found => {
+//       if (found.length) {
+//         return res.status(405).json({ error: "Title of Entry must be unique" });
+//       } else {
+//         db.addFood(foodName)
+//           .then(res => {
+//             db.findChildId(parentId, fullName).then((res2) => {
+//               db.addFood(res.id, res2.id, foodType, date, mealTime)
+//                 .then(add => {
+//                   res.status(201).json(add);
+//                 })
+//                 .catch(({ code, message }) => {
+//                   return res.status(code).json({ message });
+//                 });
+//             });
+//           })
+//           .catch(({ code, message }) => {
+//             return res.status(code).json({ message });
+//           });
+//       }
+//     })
+//     .catch(({ code, message }) => {
+//       return res.status(code).json({ message });
+//     });
+// });
+
+router.post("/addfood", authenticate, async (req, res) => {
+  let { fullName, foodName, foodType, date, parentId, mealTime } = req.body;
+  db.findChildId(parentId, fullName)
+    .then(found => {
+      db.addFood(found.id, foodType, foodName, date, mealTime)
+        .then(added => {
+          res.status(201).json(added);
+        })
+        .catch(({ code, message }) => {
+          res.status(code).json({ message });
+        });
+    })
+    .catch(({ code, message }) => {
+      res.status(code).json({ message });
+    });
+});
 
 router.post("/addchild", authenticate, (req, res) => {
   let { parentId, fullName } = req.body;

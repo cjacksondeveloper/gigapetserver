@@ -23,20 +23,10 @@ exports.up = function(knex, Promise) {
     })
     .createTable("food", column => {
       column.increments();
-      column.string("foodName", 100).notNullable();
-      column.string('foodType', 12).notNullable();
-    })
-    .createTable("children_food", column => {
-      column.increments();
-      column
       column.string("mealTime", 12);
+      column.string("foodType", 12);
+      column.string("foodName", 100).notNullable();
       column.date("date", 24)
-        .integer("foodId")
-        .unsigned()
-        .references("id")
-        .inTable("food")
-        .onDelete("CASCADE")
-        .onUpdate("CASCADE");
       column
         .integer("childId")
         .unsigned()
