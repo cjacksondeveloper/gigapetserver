@@ -10,7 +10,8 @@ module.exports = {
   findUser,
   findAllByFilter,
   findById,
-  getFoods
+  getFoods,
+  deleteFood
 };
 
 function findUser() {
@@ -75,7 +76,7 @@ function findById(table, id) {
 
 function findFoodById(id) {
   return db("food")
-  .select("children.fullName", "food.foodName", "food.mealTime", "food.FoodType", "food.id")
+  .select("children.fullName", "food.foodName", "food.mealTime", "food.foodType", "food.id")
   .where("food.id", id)
   .join("children", "children.id", "=", "food.childId")
   .first();
@@ -92,4 +93,13 @@ async function addFood(childId, foodType, foodName, date, mealTime) {
     }
   )
   return findFoodById(id)
+}
+
+async function deleteFood(id, parentId, date) {
+  await db("food").where({ id: id }).del()
+  return db("food")
+  .select("children.fullName", "food.foodName", "food.mealTime", "food.foodType", "food.id")
+  .where("parentId", parentId)
+  .andWhere("date", date)
+  .join("children", "children.id", "=", "food.childId")
 }
