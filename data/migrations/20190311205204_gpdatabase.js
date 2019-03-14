@@ -42,5 +42,8 @@ exports.down = function(knex, Promise) {
     .dropTableIfExists("users")
     .dropTableIfExists("children")
     .dropTableIfExists("food")
-    .dropTableIfExists("children_food");
+    .dropTableIfExists("children_food")
+    .dropTableIfExists("weeks")
+    .dropTableIfExists("days")
+    .dropTableIfExists("months");
 };
