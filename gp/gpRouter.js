@@ -45,22 +45,6 @@ router.post("/getstats", authenticate, (req, res) => {
     });
 });
 
-router.post("/getmonth", authenticate, (req, res) => {
-  let { fullName, dateStart, dateEnd, parentId } = req.body;
-  db.findChildId(parentId, fullName)
-    .then(found => {
-      db.getFoodStats(found.id, dateStart, dateEnd)
-        .then(added => {
-          res.status(200).json(added);
-        })
-        .catch(({ code, message }) => {
-          res.status(code).json({ message });
-        });
-    })
-    .catch(({ code, message }) => {
-      res.status(code).json({ message });
-    });
-});
 
 router.post("/addfood", authenticate, async (req, res) => {
   let { fullName, foodName, foodType, date, parentId, mealTime } = req.body;
