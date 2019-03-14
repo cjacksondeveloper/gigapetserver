@@ -28,13 +28,13 @@ router.post("/childnames", authenticate, (req, res) => {
     });
 });
 
-router.post("/getweek", authenticate, (req, res) => {
-  let { fullName, datestart, dateend, parentId } = req.body;
+router.post("/getstats", authenticate, (req, res) => {
+  let { fullName, dateStart, dateEnd, parentId } = req.body;
   db.findChildId(parentId, fullName)
     .then(found => {
-      db.getFoodStats(found.id, datestart, dateend)
+      db.getFoodStats(found.id, dateStart, dateEnd)
         .then(added => {
-          res.status(201).json(added);
+          res.status(200).json(added);
         })
         .catch(({ code, message }) => {
           res.status(code).json({ message });
@@ -46,12 +46,12 @@ router.post("/getweek", authenticate, (req, res) => {
 });
 
 router.post("/getmonth", authenticate, (req, res) => {
-  let { fullName, datestart, dateend, parentId } = req.body;
+  let { fullName, dateStart, dateEnd, parentId } = req.body;
   db.findChildId(parentId, fullName)
     .then(found => {
-      db.getFoodStats(found.id, datestart, dateend)
+      db.getFoodStats(found.id, dateStart, dateEnd)
         .then(added => {
-          res.status(201).json(added);
+          res.status(200).json(added);
         })
         .catch(({ code, message }) => {
           res.status(code).json({ message });
