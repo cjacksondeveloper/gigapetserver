@@ -67,7 +67,7 @@ router.post("/addchild", authenticate, (req, res) => {
 
 //took authenticate off delete because it would always send 401 error even if current auth headers were given
 
-router.delete("/deletefood", (req, res) => {
+router.post("/deletefood", (req, res) => {
   let { id, parentId, date } = req.body;
   db.deleteFood(id, parentId, date)
     .then(deleted => {
