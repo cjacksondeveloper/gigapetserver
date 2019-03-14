@@ -12,7 +12,8 @@ module.exports = {
   findById,
   getFoods,
   deleteFood,
-  updateFood
+  updateFood,
+  getFoodStats
 };
 
 function findUser() {
@@ -147,3 +148,8 @@ async function updateFood(
     .andWhere("date", date)
     .join("children", "children.id", "=", "food.childId");
 }
+
+// function getFoodStats(childId, dateStart, dateEnd) {
+//   return db("food")
+//   .where
+// }
