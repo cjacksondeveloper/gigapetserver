@@ -151,4 +151,9 @@ async function updateFood(
 
 function getFoodStats(childId, dateStart, dateEnd) {
   return db("food")
+  .select("foodType")
+  .count("foodType as count")
+  .whereBetween("date", [dateStart, dateEnd])
+  .andWhere("childId", childId)
+  .groupBy("foodType")
 }
