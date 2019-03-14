@@ -78,4 +78,37 @@ router.delete("/deletefood", (req, res) => {
     });
 });
 
+router.put("/updatefood", (req, res) => {
+  let {
+    id,
+    parentId,
+    fullName,
+    foodName,
+    foodType,
+    date,
+    mealTime
+  } = req.body;
+  db.findChildId(parentId, fullName)
+    .then(found => {
+      db.updateFood(
+        id,
+        found.id,
+        foodType,
+        foodName,
+        date,
+        mealTime,
+        parentId
+      )
+        .then(added => {
+          res.status(201).json(added);
+        })
+        .catch(({ code, message }) => {
+          res.status(code).json({ message });
+        });
+    })
+    .catch(({ code, message }) => {
+      res.status(code).json({ message });
+    });
+});
+
 module.exports = router;
