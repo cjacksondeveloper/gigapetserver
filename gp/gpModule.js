@@ -49,7 +49,8 @@ function getFoods(parentId, date) {
       "children.fullName",
       "food.foodName",
       "food.date",
-      "food.mealTime"
+      "food.mealTime",
+      "food.foodType"
     )
     .where("date", date)
     .andWhere("parentId", parentId)
@@ -71,8 +72,8 @@ function findChildId(parentId, fullName) {
     .first()
 }
 
-function addFood(childId, foodType, foodName, date, mealTime) {
-  return db("food").insert(
+async function addFood(childId, foodType, foodName, date, mealTime) {
+  const [id] = await db("food").insert(
     {
       childId: childId,
       foodType: foodType,
@@ -81,4 +82,5 @@ function addFood(childId, foodType, foodName, date, mealTime) {
       mealTime: mealTime
     }
   )
+  return findById("food", id)
 }
