@@ -9,7 +9,7 @@ const server = express();
 
 server.use(express.json());
 server.use(cors({ credentials: true, origin: true }))
-
+server.options('*', cors())
 server.use('/api/users', authRouter);
 server.use('/api/app', gpRouter);
 
