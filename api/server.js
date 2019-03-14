@@ -8,8 +8,15 @@ const gpRouter = require("../gp/gpRouter.js")
 const server = express();
 
 server.use(express.json());
-server.use(cors({ credentials: true, origin: true }))
-server.options('*', cors())
+
+server.use(cors({ credentials: true,  origin: '*' }))
+server.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 server.use('/api/users', authRouter);
 server.use('/api/app', gpRouter);
 
