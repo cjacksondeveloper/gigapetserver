@@ -11,7 +11,8 @@ module.exports = {
   findAllByFilter,
   findById,
   getFoods,
-  deleteFood
+  deleteFood,
+  updateFood
 };
 
 function findUser() {
@@ -65,7 +66,7 @@ function findChildId(parentId, fullName) {
   return db("children")
     .where("fullName", fullName)
     .andWhere("parentId", parentId)
-    .first()
+    .first();
 }
 
 function findById(table, id) {
@@ -76,30 +77,73 @@ function findById(table, id) {
 
 function findFoodById(id) {
   return db("food")
-  .select("children.fullName", "food.foodName", "food.mealTime", "food.foodType", "food.id")
-  .where("food.id", id)
-  .join("children", "children.id", "=", "food.childId")
-  .first();
+    .select(
+      "children.fullName",
+      "food.foodName",
+      "food.mealTime",
+      "food.foodType",
+      "food.id"
+    )
+    .where("food.id", id)
+    .join("children", "children.id", "=", "food.childId")
+    .first();
 }
 
 async function addFood(childId, foodType, foodName, date, mealTime) {
-  const [id] = await db("food").insert(
-    {
+  const [id] = await db("food").insert({
+    childId: childId,
+    foodType: foodType,
+    foodName: foodName,
+    date: date,
+    mealTime: mealTime
+  });
+  return findFoodById(id);
+}
+
+async function deleteFood(id, parentId, date) {
+  await db("food")
+    .where({ id: id })
+    .del();
+  return db("food")
+    .select(
+      "children.fullName",
+      "food.foodName",
+      "food.mealTime",
+      "food.foodType",
+      "food.id"
+    )
+    .where("parentId", parentId)
+    .andWhere("date", date)
+    .join("children", "children.id", "=", "food.childId");
+}
+
+async function updateFood(
+  foodId,
+  childId,
+  foodType,
+  foodName,
+  date,
+  mealTime,
+  parentId
+) {
+  await db("food")
+    .where("id", Number(foodId))
+    .update({
       childId: childId,
       foodType: foodType,
       foodName: foodName,
       date: date,
       mealTime: mealTime
-    }
-  )
-  return findFoodById(id)
-}
-
-async function deleteFood(id, parentId, date) {
-  await db("food").where({ id: id }).del()
+    });
   return db("food")
-  .select("children.fullName", "food.foodName", "food.mealTime", "food.foodType", "food.id")
-  .where("parentId", parentId)
-  .andWhere("date", date)
-  .join("children", "children.id", "=", "food.childId")
+    .select(
+      "children.fullName",
+      "food.foodName",
+      "food.mealTime",
+      "food.foodType",
+      "food.id"
+    )
+    .where("parentId", parentId)
+    .andWhere("date", date)
+    .join("children", "children.id", "=", "food.childId");
 }
