@@ -106,3 +106,6 @@ router.put("/updatefood", authenticate, (req, res) => {
 });
 
 module.exports = router;
+
+
+
