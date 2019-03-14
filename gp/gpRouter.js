@@ -65,4 +65,15 @@ router.post("/addchild", authenticate, (req, res) => {
     });
 });
 
+router.delete("/deletefood", authenticate, (req, res) => {
+  let { id, parentId, date } = req.body;
+  db.deleteFood(id, parentId, date)
+    .then(deleted => {
+      res.status(200).json(deleted);
+    })
+    .catch(({ code, message }) => {
+      res.status(code).json({ message });
+    });
+});
+
 module.exports = router;
