@@ -21,12 +21,6 @@ function findAllByFilter(table, filter) {
   return db(`${table}`).where(filter);
 }
 
-function findById(table, id) {
-  return db(`${table}`)
-    .where({ id })
-    .first();
-}
-
 async function add(user) {
   const [id] = await db("users").insert(user);
   return findById("users", id);
@@ -47,6 +41,7 @@ function getFoods(parentId, date) {
   return db("food")
     .select(
       "children.fullName",
+      "food.id",
       "food.foodName",
       "food.date",
       "food.mealTime",
@@ -54,7 +49,7 @@ function getFoods(parentId, date) {
     )
     .where("date", date)
     .andWhere("parentId", parentId)
-    .join("children", "children.Id", "=", "food.childId");
+    .join("children", "children.id", "=", "food.childId");
 }
 
 function addFood(parentId, fullName) {
@@ -72,6 +67,20 @@ function findChildId(parentId, fullName) {
     .first()
 }
 
+function findById(table, id) {
+  return db(`${table}`)
+    .where({ id })
+    .first();
+}
+
+function findFoodById(id) {
+  return db("food")
+  .select("children.fullName", "food.foodName", "food.mealTime", "food.FoodType", "food.id")
+  .where("food.id", id)
+  .join("children", "children.id", "=", "food.childId")
+  .first();
+}
+
 async function addFood(childId, foodType, foodName, date, mealTime) {
   const [id] = await db("food").insert(
     {
@@ -82,5 +91,5 @@ async function addFood(childId, foodType, foodName, date, mealTime) {
       mealTime: mealTime
     }
   )
-  return findById("food", id)
+  return findFoodById(id)
 }
