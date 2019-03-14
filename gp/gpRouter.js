@@ -28,13 +28,39 @@ router.post("/childnames", authenticate, (req, res) => {
     });
 });
 
-// router.post("/week/:date", authenticate, (req, res) => {
+router.post("/getweek", authenticate, (req, res) => {
+  let { fullName, datestart, dateend, parentId } = req.body;
+  db.findChildId(parentId, fullName)
+    .then(found => {
+      db.getFoodStats(found.id, datestart, dateend)
+        .then(added => {
+          res.status(201).json(added);
+        })
+        .catch(({ code, message }) => {
+          res.status(code).json({ message });
+        });
+    })
+    .catch(({ code, message }) => {
+      res.status(code).json({ message });
+    });
+});
 
-// })
-
-// router.post("/month/:date", authenticate, (req,res) => {
-
-// })
+router.post("/getmonth", authenticate, (req, res) => {
+  let { fullName, datestart, dateend, parentId } = req.body;
+  db.findChildId(parentId, fullName)
+    .then(found => {
+      db.getFoodStats(found.id, datestart, dateend)
+        .then(added => {
+          res.status(201).json(added);
+        })
+        .catch(({ code, message }) => {
+          res.status(code).json({ message });
+        });
+    })
+    .catch(({ code, message }) => {
+      res.status(code).json({ message });
+    });
+});
 
 router.post("/addfood", authenticate, async (req, res) => {
   let { fullName, foodName, foodType, date, parentId, mealTime } = req.body;
@@ -67,7 +93,7 @@ router.post("/addchild", authenticate, (req, res) => {
 
 //took authenticate off delete because it would always send 401 error even if current auth headers were given
 
-router.post("/deletefood", (req, res) => {
+router.post("/deletefood", authenticate, (req, res) => {
   let { id, parentId, date } = req.body;
   db.deleteFood(id, parentId, date)
     .then(deleted => {
@@ -78,27 +104,11 @@ router.post("/deletefood", (req, res) => {
     });
 });
 
-router.put("/updatefood", (req, res) => {
-  let {
-    id,
-    parentId,
-    fullName,
-    foodName,
-    foodType,
-    date,
-    mealTime
-  } = req.body;
+router.put("/updatefood", authenticate, (req, res) => {
+  let { id, parentId, fullName, foodName, foodType, date, mealTime } = req.body;
   db.findChildId(parentId, fullName)
     .then(found => {
-      db.updateFood(
-        id,
-        found.id,
-        foodType,
-        foodName,
-        date,
-        mealTime,
-        parentId
-      )
+      db.updateFood(id, found.id, foodType, foodName, date, mealTime, parentId)
         .then(added => {
           res.status(201).json(added);
         })
