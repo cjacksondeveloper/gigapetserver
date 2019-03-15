@@ -13,7 +13,8 @@ module.exports = {
   getFoods,
   deleteFood,
   updateFood,
-  getFoodStats
+  getFoodStats,
+  findUsername
 };
 
 function findUser() {
@@ -156,4 +157,9 @@ function getFoodStats(childId, dateStart, dateEnd) {
   .whereBetween("date", [dateStart, dateEnd])
   .andWhere("childId", childId)
   .groupBy("foodType")
+}
+
+function findUsername(username) {
+  return db("users")
+  .where("username", username)
 }
