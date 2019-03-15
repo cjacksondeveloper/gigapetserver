@@ -9,13 +9,19 @@ router.post("/register", (req, res) => {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
   user.password = hash;
-  db.add(user)
-    .then(saved => {
-      res.status(201).json(saved);
-    })
-    .catch(error => {
-      res.status(500).json(error);
-    });
+  db.findUsername(user.username).then(found => {
+    if (found.length) {
+      return res.status(405).json({ error: "Username must be unique" });
+    } else {
+      db.add(user)
+        .then(saved => {
+          res.status(201).json(saved);
+        })
+        .catch(error => {
+          res.status(500).json(error);
+        });
+    }
+  });
 });
 
 router.post("/login", (req, res) => {
@@ -25,7 +31,7 @@ router.post("/login", (req, res) => {
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = authMW.makejwt(user);
-        const userdata = {token: token, userId: user.id}
+        const userdata = { token: token, userId: user.id };
         res.status(200).json(userdata);
       } else {
         res

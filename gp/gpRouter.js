@@ -63,9 +63,9 @@ router.post("/addfood", authenticate, async (req, res) => {
     });
 });
 
-router.post("/addchild", authenticate, (req, res) => {
+router.post("/addchild", (req, res) => {
   let { parentId, fullName } = req.body;
-  addition = { parentId, fullName };
+  let addition = { parentId, fullName };
   db.addChild(addition)
     .then(add => {
       res.status(201).json(add);
